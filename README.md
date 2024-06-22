@@ -19,3 +19,10 @@ O banco é criado através da prop: spring.jpa.hibernate.ddl-auto=update
 Além disso, é indicado possuir instalado e configurado o Maven 3. Você pode baixar daqui:
 
 - [Apache Maven](https://maven.apache.org/download.cgi#)
+
+## Acessar o projeto
+
+Poderá ser utilizado a IDE de preferencia, ou rodar diretamente pelo maven utilizando o comando: mvn spring-boot:run
+
+Projeto utiliza a porta default:8080 -> http://localhost:8080
+
