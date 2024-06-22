@@ -1,6 +1,6 @@
 # Dependências do Projeto
 
-Instalar banco de dados postgres
+## Banco de dados
 
 https://www.postgresql.org/download/
 
