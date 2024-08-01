@@ -56,4 +56,14 @@ public class UsuarioController {
         List<Usuario> usuarios = usuarioService.findAll();
         return ResponseEntity.ok(usuarios);
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<Usuario> login(@RequestBody Usuario usuario) {
+        Usuario usuarioAutenticado = usuarioService.authenticate(usuario.getCpf(), usuario.getSenha());
+        if (usuarioAutenticado != null) {
+            return ResponseEntity.ok(usuarioAutenticado);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+    }
 }

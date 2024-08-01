@@ -29,4 +29,13 @@ public class UsuarioService {
     public List<Usuario> findAll(){
         return usuarioRepository.findAll();
     }
+
+    public Usuario authenticate(String cpf, String senha) {
+        Usuario usuario = usuarioRepository.findByCpf(cpf);
+        if (usuario != null && usuario.getSenha().equals(senha)) {
+            return usuario;
+        }
+
+        return null;
+    }
 }
