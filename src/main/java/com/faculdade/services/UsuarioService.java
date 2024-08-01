@@ -1,5 +1,7 @@
-package com.faculdade.usuario;
+package com.faculdade.services;
 
+import com.faculdade.domain.entity.Usuario;
+import com.faculdade.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
