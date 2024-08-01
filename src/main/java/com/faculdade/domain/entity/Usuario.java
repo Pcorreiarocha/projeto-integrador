@@ -1,6 +1,7 @@
 package com.faculdade.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -37,5 +38,6 @@ public class Usuario {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CODIGO", referencedColumnName = "CODIGO")
+    @JsonIgnoreProperties("hibernateLazyInitializer")
     private Perfil perfil;
 }
