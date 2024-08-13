@@ -1,15 +1,17 @@
-package com.faculdade.usuario;
+package com.faculdade.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.faculdade.domain.entity.Usuario;
+import com.faculdade.repositories.UsuarioRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class UsuarioService {
 
-    @Autowired
     private UsuarioRepository usuarioRepository;
 
     public Usuario save(Usuario usuario) {

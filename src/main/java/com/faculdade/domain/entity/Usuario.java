@@ -1,10 +1,8 @@
-package com.faculdade.usuario;
+package com.faculdade.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -37,4 +35,9 @@ public class Usuario {
 
     @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime dataCadastro;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CODIGO", referencedColumnName = "CODIGO")
+    @JsonIgnoreProperties("hibernateLazyInitializer")
+    private Perfil perfil;
 }

@@ -1,21 +1,26 @@
-package com.faculdade.usuario;
+package com.faculdade.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.faculdade.domain.entity.Usuario;
+import com.faculdade.domain.response.LoginResponse;
+import com.faculdade.services.UsuarioService;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
+@AllArgsConstructor
 @RequestMapping("api/usuario")
 public class UsuarioController {
 
-    @Autowired
     private UsuarioService usuarioService;
 
     @PostMapping
     public ResponseEntity<Usuario> save(@RequestBody Usuario usuario) {
+        usuario.setDataCadastro(LocalDateTime.now());
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.save(usuario));
     }
 
@@ -58,8 +63,8 @@ public class UsuarioController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Usuario> login(@RequestBody Usuario usuario) {
-        Usuario usuarioAutenticado = usuarioService.authenticate(usuario.getCpf(), usuario.getSenha());
+    public ResponseEntity<Usuario> login(@RequestBody LoginResponse login) {
+        Usuario usuarioAutenticado = usuarioService.authenticate(login.getCpf(), login.getSenha());
         if (usuarioAutenticado != null) {
             return ResponseEntity.ok(usuarioAutenticado);
         } else {
