@@ -3,6 +3,7 @@ package com.faculdade.services;
 import com.faculdade.domain.entity.Usuario;
 import com.faculdade.repositories.UsuarioRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,8 +14,10 @@ import java.util.Optional;
 public class UsuarioService {
 
     private UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public Usuario save(Usuario usuario) {
+        usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
         return usuarioRepository.save(usuario);
     }
 
@@ -34,7 +37,7 @@ public class UsuarioService {
 
     public Usuario authenticate(String cpf, String senha) {
         Usuario usuario = usuarioRepository.findByCpf(cpf);
-        if (usuario != null && usuario.getSenha().equals(senha)) {
+        if (usuario != null && passwordEncoder.matches(senha, usuario.getSenha())) {
             return usuario;
         }
 
