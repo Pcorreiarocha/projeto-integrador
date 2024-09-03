@@ -11,7 +11,8 @@ public enum PerfilTypeEnum {
     PACIENTE(1, "Paciente"),
     NUTRICIONISTA(2, "Nutricionista"),
     COZINHA(3, "Cozinha"),
-    GARCOM(4, "Garçom");
+    GARCOM(4, "Garçom"),
+    MEDICO(5, "Médico");
 
     private final Integer codigo;
 
