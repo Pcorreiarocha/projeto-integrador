@@ -1,5 +1,8 @@
 package com.faculdade.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,12 +19,16 @@ public class Pedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idPedido;
 
+    @JsonFormat(pattern = "statusPedido")
     private String statusPedido;
 
+    @JsonFormat(pattern = "confirmacaoGarcom")
     private Boolean confirmacaoGarcom;
 
+    @JsonFormat(pattern = "confirmacaoPaciente")
     private Boolean confirmacaoPaciente;
 
-    @OneToMany(mappedBy = "pedido")
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<PedidoRefeicao> pedidoRefeicoes = new ArrayList<>();
 }
