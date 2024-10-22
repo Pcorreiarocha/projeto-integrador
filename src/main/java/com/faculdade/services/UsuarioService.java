@@ -1,6 +1,6 @@
 package com.faculdade.services;
 
-import com.faculdade.domain.entity.Usuario;
+import com.faculdade.domain.entity.UsuarioEntity;
 import com.faculdade.repositories.UsuarioRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,29 +16,29 @@ public class UsuarioService {
     private UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public Usuario save(Usuario usuario) {
-        usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
-        return usuarioRepository.save(usuario);
+    public UsuarioEntity save( UsuarioEntity usuarioEntity ) {
+        usuarioEntity.setSenha(passwordEncoder.encode( usuarioEntity.getSenha()));
+        return usuarioRepository.save( usuarioEntity );
     }
 
-    public Usuario findById(Long id) {
-        Optional<Usuario> usuario = usuarioRepository.findById(id);
+    public UsuarioEntity findById(Long id) {
+        Optional< UsuarioEntity > usuario = usuarioRepository.findById(id);
         return usuario.orElse(null);
     }
 
     public void delete(Long id) {
-        Usuario usuario = findById(id);
-        usuarioRepository.delete(usuario);
+        UsuarioEntity usuarioEntity = findById(id);
+        usuarioRepository.delete( usuarioEntity );
     }
 
-    public List<Usuario> findAll() {
+    public List< UsuarioEntity > findAll() {
         return usuarioRepository.findAll();
     }
 
-    public Usuario authenticate(String cpf, String senha) {
-        Usuario usuario = usuarioRepository.findByCpf(cpf);
-        if (usuario != null && passwordEncoder.matches(senha, usuario.getSenha())) {
-            return usuario;
+    public UsuarioEntity authenticate(String cpf, String senha) {
+        UsuarioEntity usuarioEntity = usuarioRepository.findByCpf(cpf);
+        if ( usuarioEntity != null && passwordEncoder.matches(senha, usuarioEntity.getSenha())) {
+            return usuarioEntity;
         }
 
         return null;

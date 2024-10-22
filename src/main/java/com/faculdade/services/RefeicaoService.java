@@ -1,7 +1,7 @@
 package com.faculdade.services;
 
-import com.faculdade.domain.entity.Refeicao;
-import com.faculdade.domain.response.RefeicaoResponse;
+import com.faculdade.domain.entity.RefeicaoEntity;
+import com.faculdade.controllers.dtos.refeicao.RefeicaoResponseDto;
 import com.faculdade.repositories.RefeicaoRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,27 +16,27 @@ public class RefeicaoService {
 
     private RefeicaoRepository refeicaoRepository;
 
-    public Refeicao findById(Long id) {
-        Optional<Refeicao> refeicao = refeicaoRepository.findById(id);
+    public RefeicaoEntity findById(Long id) {
+        Optional< RefeicaoEntity > refeicao = refeicaoRepository.findById(id);
         return refeicao.orElse(null);
     }
 
-    public Refeicao save(Refeicao refeicao) {
-        refeicao.setDisponibilidade("Ativo");
-        return refeicaoRepository.save(refeicao);
+    public RefeicaoEntity save( RefeicaoEntity refeicaoEntity ) {
+        refeicaoEntity.setDisponibilidade("Ativo");
+        return refeicaoRepository.save( refeicaoEntity );
     }
 
     public void delete(Long id) {
-        Refeicao refeicao = findById(id);
-        refeicao.setDisponibilidade("Inativo");
-        refeicaoRepository.save(refeicao);
+        RefeicaoEntity refeicaoEntity = findById(id);
+        refeicaoEntity.setDisponibilidade("Inativo");
+        refeicaoRepository.save( refeicaoEntity );
     }
 
-    public List<RefeicaoResponse> findAll() {
-        List<Refeicao> refeicoes = refeicaoRepository.findAll();
+    public List< RefeicaoResponseDto > findAll() {
+        List< RefeicaoEntity > refeicoes = refeicaoRepository.findAll();
         return refeicoes.stream()
-                .filter(refeicao -> "Ativo".equals(refeicao.getDisponibilidade()))
-                .map(refeicao -> new RefeicaoResponse(refeicao.getIdRefeicao(), refeicao.getNome(), refeicao.getDescricao()))
+                .filter( refeicaoEntity -> "Ativo".equals( refeicaoEntity.getDisponibilidade()))
+                .map( refeicaoEntity -> new RefeicaoResponseDto( refeicaoEntity.getIdRefeicao(), refeicaoEntity.getNome(), refeicaoEntity.getDescricao()))
                 .collect(Collectors.toList());
     }
 }

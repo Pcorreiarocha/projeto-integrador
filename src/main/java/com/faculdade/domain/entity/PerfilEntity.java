@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Entity
 @Getter
-public class Perfil {
+public class PerfilEntity {
 
     @Id
     private Long codigo;

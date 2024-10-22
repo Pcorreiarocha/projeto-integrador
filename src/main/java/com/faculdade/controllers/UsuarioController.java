@@ -1,7 +1,7 @@
 package com.faculdade.controllers;
 
-import com.faculdade.domain.entity.Usuario;
-import com.faculdade.domain.response.LoginResponse;
+import com.faculdade.domain.entity.UsuarioEntity;
+import com.faculdade.controllers.dtos.login.LoginRequestDto;
 import com.faculdade.services.UsuarioService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,27 +19,27 @@ public class UsuarioController {
     private UsuarioService usuarioService;
 
     @PostMapping
-    public ResponseEntity<Usuario> save(@RequestBody Usuario usuario) {
-        usuario.setDataCadastro(LocalDateTime.now());
-        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.save(usuario));
+    public ResponseEntity<UsuarioEntity> save(@RequestBody UsuarioEntity usuarioEntity ) {
+        usuarioEntity.setDataCadastro(LocalDateTime.now());
+        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.save( usuarioEntity ));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Usuario> findById(@PathVariable Long id) {
-        Usuario usuario = usuarioService.findById(id);
-        if (usuario != null) {
-            return ResponseEntity.ok(usuario);
+    public ResponseEntity<UsuarioEntity> findById(@PathVariable Long id) {
+        UsuarioEntity usuarioEntity = usuarioService.findById(id);
+        if ( usuarioEntity != null) {
+            return ResponseEntity.ok( usuarioEntity );
         } else {
             return ResponseEntity.notFound().build();
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Usuario> update(@PathVariable Long id, @RequestBody Usuario usuarioAtualizado) {
-        Usuario usuario = usuarioService.findById(id);
-        if (usuario != null) {
-            usuarioAtualizado.setId(id);
-            return ResponseEntity.ok(usuarioService.save(usuarioAtualizado));
+    public ResponseEntity<UsuarioEntity> update(@PathVariable Long id, @RequestBody UsuarioEntity usuarioEntityAtualizado ) {
+        UsuarioEntity usuarioEntity = usuarioService.findById(id);
+        if ( usuarioEntity != null) {
+            usuarioEntityAtualizado.setId(id);
+            return ResponseEntity.ok(usuarioService.save( usuarioEntityAtualizado ));
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -47,8 +47,8 @@ public class UsuarioController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        Usuario usuario = usuarioService.findById(id);
-        if (usuario != null) {
+        UsuarioEntity usuarioEntity = usuarioService.findById(id);
+        if ( usuarioEntity != null) {
             usuarioService.delete(id);
             return ResponseEntity.noContent().build();
         } else {
@@ -57,18 +57,18 @@ public class UsuarioController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<Usuario>> findAll() {
-        List<Usuario> usuarios = usuarioService.findAll();
-        return ResponseEntity.ok(usuarios);
+    public ResponseEntity<List<UsuarioEntity>> findAll() {
+        List< UsuarioEntity > usuarioEntities = usuarioService.findAll();
+        return ResponseEntity.ok( usuarioEntities );
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Usuario> login(@RequestBody LoginResponse login) {
-        Usuario usuarioAutenticado = usuarioService.authenticate(login.getCpf(), login.getSenha());
-        if (usuarioAutenticado != null) {
-            return ResponseEntity.ok(usuarioAutenticado);
+    public ResponseEntity<UsuarioEntity> login( @RequestBody LoginRequestDto loginResponse ) {
+        UsuarioEntity usuarioEntityAutenticado = usuarioService.authenticate( loginResponse.cpf(), loginResponse.senha() );
+        if ( usuarioEntityAutenticado != null) {
+            return ResponseEntity.ok( usuarioEntityAutenticado );
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return ResponseEntity.status( HttpStatus.UNAUTHORIZED ).build();
         }
     }
 }
