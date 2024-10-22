@@ -23,6 +23,9 @@ public class Refeicao {
     @JsonFormat(pattern = "descricao")
     private String descricao;
 
+    @JsonFormat(pattern = "disponibilidade")
+    private String disponibilidade;
+
     @OneToMany(mappedBy = "refeicao")
     private List<PedidoRefeicao> pedidoRefeicoes = new ArrayList<>();
 }

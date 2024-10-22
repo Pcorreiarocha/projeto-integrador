@@ -1,18 +1,16 @@
 package com.faculdade.controllers;
 
 import com.faculdade.domain.entity.Refeicao;
-import com.faculdade.domain.entity.Usuario;
+import com.faculdade.domain.response.RefeicaoResponse;
 import com.faculdade.services.RefeicaoService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Ref;
 import java.util.List;
 
-@Controller
+@RestController
 @AllArgsConstructor
 @RequestMapping("/refeicao")
 public class RefeicaoController {
@@ -25,21 +23,24 @@ public class RefeicaoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Refeicao> findById(@PathVariable Long id) {
+    public ResponseEntity<RefeicaoResponse> findById(@PathVariable Long id) {
         Refeicao refeicao = refeicaoService.findById(id);
         if (refeicao != null) {
-            return ResponseEntity.ok(refeicao);
+            RefeicaoResponse response = new RefeicaoResponse(refeicao.getIdRefeicao(), refeicao.getNome(), refeicao.getDescricao());
+            return ResponseEntity.ok(response);
         } else {
             return ResponseEntity.notFound().build();
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Refeicao> update(@PathVariable Long id, @RequestBody Refeicao refeicaoAtualizada) {
+    public ResponseEntity<RefeicaoResponse> update(@PathVariable Long id, @RequestBody Refeicao refeicaoAtualizada) {
         Refeicao refeicao = refeicaoService.findById(id);
         if (refeicao != null) {
             refeicaoAtualizada.setIdRefeicao(id);
-            return ResponseEntity.ok(refeicaoService.save(refeicaoAtualizada));
+            Refeicao updatedRefeicao = refeicaoService.save(refeicaoAtualizada);
+            RefeicaoResponse response = new RefeicaoResponse(updatedRefeicao.getIdRefeicao(), updatedRefeicao.getNome(), updatedRefeicao.getDescricao());
+            return ResponseEntity.ok(response);
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -57,8 +58,8 @@ public class RefeicaoController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<Refeicao>> findAll() {
-        List<Refeicao> refeicoes = refeicaoService.findAll();
+    public ResponseEntity<List<RefeicaoResponse>> findAll() {
+        List<RefeicaoResponse> refeicoes = refeicaoService.findAll();
         return ResponseEntity.ok(refeicoes);
     }
 }
