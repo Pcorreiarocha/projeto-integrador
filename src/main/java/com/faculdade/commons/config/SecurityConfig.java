@@ -1,4 +1,4 @@
-package com.faculdade.config;
+package com.faculdade.commons.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

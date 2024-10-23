@@ -39,5 +39,5 @@ public class UsuarioEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CODIGO", referencedColumnName = "CODIGO")
     @JsonIgnoreProperties("hibernateLazyInitializer")
-    private PerfilEntity perfilEntity;
+    private PerfilEntity perfil;
 }
