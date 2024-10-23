@@ -1,8 +1,10 @@
 package com.faculdade.services;
 
+import com.faculdade.controllers.dtos.perfil.PerfilTypeResponseDto;
 import com.faculdade.controllers.dtos.usuario.UsuarioRequestDto;
 import com.faculdade.controllers.dtos.usuario.UsuarioResponseDto;
 import com.faculdade.domain.entity.PacienteEntity;
+import com.faculdade.domain.entity.PerfilEntity;
 import com.faculdade.domain.entity.UsuarioEntity;
 import com.faculdade.repositories.PacienteRepository;
 import com.faculdade.repositories.UsuarioRepository;
@@ -26,20 +28,30 @@ public class UsuarioService {
 
     public UsuarioResponseDto save( UsuarioRequestDto usuarioRequestDto ) {
         UsuarioEntity usuarioEntity = modelMapper.map( usuarioRequestDto, UsuarioEntity.class );
+        
         usuarioEntity.setSenha( passwordEncoder.encode( usuarioEntity.getSenha() ) );
         usuarioEntity.setDataCadastro( LocalDateTime.now() );
 
+        PerfilEntity perfilEntity = new PerfilEntity();
+        perfilEntity.setCodigo( usuarioRequestDto.perfil().codigo() );
+        perfilEntity.setDescricao( usuarioRequestDto.perfil().descricao() );
+        usuarioEntity.setPerfil( perfilEntity );
+
+        PerfilTypeResponseDto perfilTypeResponseDto = new PerfilTypeResponseDto( usuarioRequestDto.perfil().codigo(),
+                                                                                 usuarioRequestDto.perfil().descricao(),
+                                                                                 "S" );
+
         usuarioRepository.save( usuarioEntity );
 
-        /*if( usuarioEntity.getPerfil().getDescricao().equals( "Paciente" ) ) {
+        if( usuarioEntity.getPerfil().getDescricao().equals( "Paciente" ) ) {
             PacienteEntity pacienteEntity = new PacienteEntity();
             pacienteEntity.setUsuario( usuarioEntity );
             pacienteEntity.setMedico( null );
             pacienteRepository.save( pacienteEntity );
-        }*/
+        }
 
         return new UsuarioResponseDto( usuarioEntity.getNome(), usuarioEntity.getCpf(), usuarioEntity.getSenha(), usuarioEntity.getDataNascimento(),
-                                       usuarioEntity.getSexo(), usuarioEntity.getDataCadastro());
+                                       usuarioEntity.getSexo(), usuarioEntity.getDataCadastro(), perfilTypeResponseDto );
     }
 
     public UsuarioEntity findById(Long id) {

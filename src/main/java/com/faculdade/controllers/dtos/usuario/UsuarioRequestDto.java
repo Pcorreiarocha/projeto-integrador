@@ -8,7 +8,7 @@ public record UsuarioRequestDto( String nome,
                                  String cpf,
                                  String senha,
                                  LocalDate dataNascimento,
-                                 String sexo
-                                 /*PerfilTypeRequestDto perfil*/ ) {
+                                 String sexo,
+                                 PerfilTypeRequestDto perfil ) {
 
 }

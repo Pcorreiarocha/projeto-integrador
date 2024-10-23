@@ -10,6 +10,6 @@ public record UsuarioResponseDto( String nome,
                                   String senha,
                                   LocalDate dataNascimento,
                                   String sexo,
-                                  LocalDateTime dataCadastro/*,
-                                  PerfilTypeResponseDto perfil */) {
+                                  LocalDateTime dataCadastro,
+                                  PerfilTypeResponseDto perfil ) {
 }
