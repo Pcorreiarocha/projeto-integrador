@@ -1,7 +1,7 @@
 package com.faculdade.services;
 
-import com.faculdade.domain.entity.Pedido;
-import com.faculdade.domain.entity.PedidoRefeicao;
+import com.faculdade.domain.entity.PedidoEntity;
+import com.faculdade.domain.entity.PedidoRefeicaoEntity;
 import com.faculdade.repositories.PedidoRefeicaoRepository;
 import com.faculdade.repositories.PedidoRepository;
 import lombok.AllArgsConstructor;
@@ -17,14 +17,14 @@ public class PedidoService {
     private PedidoRefeicaoRepository pedidoRefeicaoRepository;
 
     @Transactional
-    public Pedido criarPedido(Pedido pedido) {
-        Pedido novoPedido = pedidoRepository.save(pedido);
+    public PedidoEntity criarPedido( PedidoEntity pedidoEntity ) {
+        PedidoEntity novoPedidoEntity = pedidoRepository.save( pedidoEntity );
 
-        for (PedidoRefeicao pedidoRefeicao : pedido.getPedidoRefeicoes()) {
-            pedidoRefeicao.setPedido(novoPedido);
-            pedidoRefeicaoRepository.save(pedidoRefeicao);
+        for ( PedidoRefeicaoEntity pedidoRefeicaoEntity : pedidoEntity.getPedidoRefeicoes()) {
+            pedidoRefeicaoEntity.setPedidoEntity( novoPedidoEntity );
+            pedidoRefeicaoRepository.save( pedidoRefeicaoEntity );
         }
 
-        return novoPedido;
+        return novoPedidoEntity;
     }
 }

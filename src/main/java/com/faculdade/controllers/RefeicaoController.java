@@ -1,18 +1,16 @@
 package com.faculdade.controllers;
 
-import com.faculdade.domain.entity.Refeicao;
-import com.faculdade.domain.entity.Usuario;
+import com.faculdade.domain.entity.RefeicaoEntity;
+import com.faculdade.controllers.dtos.refeicao.RefeicaoResponseDto;
 import com.faculdade.services.RefeicaoService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Ref;
 import java.util.List;
 
-@Controller
+@RestController
 @AllArgsConstructor
 @RequestMapping("/refeicao")
 public class RefeicaoController {
@@ -20,26 +18,29 @@ public class RefeicaoController {
     private RefeicaoService refeicaoService;
 
     @PostMapping
-    public ResponseEntity<Refeicao> save(@RequestBody Refeicao refeicao) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(refeicaoService.save(refeicao));
+    public ResponseEntity< RefeicaoEntity > save(@RequestBody RefeicaoEntity refeicaoEntity ) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(refeicaoService.save( refeicaoEntity ));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Refeicao> findById(@PathVariable Long id) {
-        Refeicao refeicao = refeicaoService.findById(id);
-        if (refeicao != null) {
-            return ResponseEntity.ok(refeicao);
+    public ResponseEntity< RefeicaoResponseDto > findById(@PathVariable Long id) {
+        RefeicaoEntity refeicaoEntity = refeicaoService.findById(id);
+        if ( refeicaoEntity != null) {
+            RefeicaoResponseDto response = new RefeicaoResponseDto( refeicaoEntity.getIdRefeicao(), refeicaoEntity.getNome(), refeicaoEntity.getDescricao());
+            return ResponseEntity.ok(response);
         } else {
             return ResponseEntity.notFound().build();
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Refeicao> update(@PathVariable Long id, @RequestBody Refeicao refeicaoAtualizada) {
-        Refeicao refeicao = refeicaoService.findById(id);
-        if (refeicao != null) {
-            refeicaoAtualizada.setIdRefeicao(id);
-            return ResponseEntity.ok(refeicaoService.save(refeicaoAtualizada));
+    public ResponseEntity< RefeicaoResponseDto > update(@PathVariable Long id, @RequestBody RefeicaoEntity refeicaoEntityAtualizada ) {
+        RefeicaoEntity refeicaoEntity = refeicaoService.findById(id);
+        if ( refeicaoEntity != null) {
+            refeicaoEntityAtualizada.setIdRefeicao(id);
+            RefeicaoEntity updatedRefeicaoEntity = refeicaoService.save( refeicaoEntityAtualizada );
+            RefeicaoResponseDto response = new RefeicaoResponseDto( updatedRefeicaoEntity.getIdRefeicao(), updatedRefeicaoEntity.getNome(), updatedRefeicaoEntity.getDescricao());
+            return ResponseEntity.ok(response);
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -47,8 +48,8 @@ public class RefeicaoController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        Refeicao refeicao = refeicaoService.findById(id);
-        if (refeicao != null) {
+        RefeicaoEntity refeicaoEntity = refeicaoService.findById(id);
+        if ( refeicaoEntity != null) {
             refeicaoService.delete(id);
             return ResponseEntity.noContent().build();
         } else {
@@ -57,8 +58,8 @@ public class RefeicaoController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<Refeicao>> findAll() {
-        List<Refeicao> refeicoes = refeicaoService.findAll();
+    public ResponseEntity<List< RefeicaoResponseDto >> findAll() {
+        List< RefeicaoResponseDto > refeicoes = refeicaoService.findAll();
         return ResponseEntity.ok(refeicoes);
     }
 }

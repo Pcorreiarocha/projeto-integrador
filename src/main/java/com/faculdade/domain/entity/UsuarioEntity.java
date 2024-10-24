@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-public class Usuario {
+public class UsuarioEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,5 +39,5 @@ public class Usuario {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CODIGO", referencedColumnName = "CODIGO")
     @JsonIgnoreProperties("hibernateLazyInitializer")
-    private Perfil perfil;
+    private PerfilEntity perfil;
 }

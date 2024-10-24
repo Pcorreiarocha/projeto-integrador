@@ -1,9 +1,9 @@
 package com.faculdade.repositories;
 
-import com.faculdade.domain.entity.Usuario;
+import com.faculdade.domain.entity.UsuarioEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
+public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Long> {
 
-    public Usuario findByCpf(String cpf);
+    public UsuarioEntity findByCpf(String cpf);
 }

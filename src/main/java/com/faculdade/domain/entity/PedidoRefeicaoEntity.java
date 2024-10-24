@@ -8,7 +8,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-public class PedidoRefeicao {
+public class PedidoRefeicaoEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,11 +17,11 @@ public class PedidoRefeicao {
     @ManyToOne
     @JoinColumn(name = "id_pedido")
     @JsonBackReference
-    private Pedido pedido;
+    private PedidoEntity pedidoEntity;
 
     @ManyToOne
     @JoinColumn(name = "id_refeicao")
-    private Refeicao refeicao;
+    private RefeicaoEntity refeicaoEntity;
 
     private Long quantidadeRefeicao;
 }

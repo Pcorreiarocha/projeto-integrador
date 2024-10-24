@@ -1,6 +1,5 @@
 package com.faculdade.domain.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -13,7 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-public class Pedido {
+public class PedidoEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +27,7 @@ public class Pedido {
     @JsonFormat(pattern = "confirmacaoPaciente")
     private Boolean confirmacaoPaciente;
 
-    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "pedidoEntity", cascade = CascadeType.ALL)
     @JsonManagedReference
-    private List<PedidoRefeicao> pedidoRefeicoes = new ArrayList<>();
+    private List<PedidoRefeicaoEntity> pedidoRefeicoes = new ArrayList<>();
 }

@@ -11,7 +11,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-public class Refeicao {
+public class RefeicaoEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,6 +23,9 @@ public class Refeicao {
     @JsonFormat(pattern = "descricao")
     private String descricao;
 
-    @OneToMany(mappedBy = "refeicao")
-    private List<PedidoRefeicao> pedidoRefeicoes = new ArrayList<>();
+    @JsonFormat(pattern = "disponibilidade")
+    private String disponibilidade;
+
+    @OneToMany(mappedBy = "refeicaoEntity")
+    private List< PedidoRefeicaoEntity > pedidoRefeicoes = new ArrayList<>();
 }
