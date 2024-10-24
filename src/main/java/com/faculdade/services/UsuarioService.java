@@ -1,5 +1,6 @@
 package com.faculdade.services;
 
+import com.faculdade.commons.exceptions.NegocioException;
 import com.faculdade.controllers.dtos.perfil.PerfilTypeResponseDto;
 import com.faculdade.controllers.dtos.usuario.UsuarioRequestDto;
 import com.faculdade.controllers.dtos.usuario.UsuarioResponseDto;
@@ -15,16 +16,16 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class UsuarioService {
 
-    private final ModelMapper modelMapper;
-    private UsuarioRepository usuarioRepository;
-    private PacienteRepository pacienteRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final ModelMapper        modelMapper;
+    private       UsuarioRepository  usuarioRepository;
+    private       PacienteRepository pacienteRepository;
+    private final PasswordEncoder    passwordEncoder;
 
     public UsuarioResponseDto save( UsuarioRequestDto usuarioRequestDto ) {
         UsuarioEntity usuarioEntity = modelMapper.map( usuarioRequestDto, UsuarioEntity.class );
@@ -50,30 +51,58 @@ public class UsuarioService {
             pacienteRepository.save( pacienteEntity );
         }
 
-        return new UsuarioResponseDto( usuarioEntity.getNome(), usuarioEntity.getCpf(), usuarioEntity.getSenha(), usuarioEntity.getDataNascimento(),
-                                       usuarioEntity.getSexo(), usuarioEntity.getDataCadastro(), perfilTypeResponseDto );
+        return new UsuarioResponseDto( usuarioEntity.getId(), usuarioEntity.getNome(), usuarioEntity.getCpf(), usuarioEntity.getSenha(),
+                usuarioEntity.getDataNascimento(), usuarioEntity.getSexo(), usuarioEntity.getDataCadastro(), perfilTypeResponseDto );
     }
 
-    public UsuarioEntity findById(Long id) {
-        Optional< UsuarioEntity > usuario = usuarioRepository.findById(id);
-        return usuario.orElse(null);
+    public UsuarioResponseDto findById( Long id ) {
+        UsuarioEntity usuarioEntity = usuarioRepository.findById( id )
+                .orElseThrow( () -> new NegocioException( "Usuário não encontrado" ) );
+
+        PerfilTypeResponseDto perfilTypeResponseDto = new PerfilTypeResponseDto( usuarioEntity.getPerfil().getCodigo(),
+                                                                                 usuarioEntity.getPerfil().getDescricao(),
+                                                                            "S" );
+
+        return new UsuarioResponseDto( usuarioEntity.getId(), usuarioEntity.getNome(), usuarioEntity.getCpf(), usuarioEntity.getSenha(),
+                usuarioEntity.getDataNascimento(), usuarioEntity.getSexo(), usuarioEntity.getDataCadastro(), perfilTypeResponseDto );
     }
 
-    public void delete(Long id) {
-        UsuarioEntity usuarioEntity = findById(id);
+    public void delete( Long id ) {
+        UsuarioResponseDto usuarioResponseDto = findById(id);
+        UsuarioEntity usuarioEntity = modelMapper.map( usuarioResponseDto, UsuarioEntity.class );
         usuarioRepository.delete( usuarioEntity );
     }
 
-    public List< UsuarioEntity > findAll() {
-        return usuarioRepository.findAll();
+    public List<UsuarioResponseDto> findAll() {
+        return usuarioRepository.findAll().stream()
+                                .map(usuarioEntity -> new UsuarioResponseDto(
+                                        usuarioEntity.getId(),
+                                        usuarioEntity.getNome(),
+                                        usuarioEntity.getCpf(),
+                                        usuarioEntity.getSenha(),
+                                        usuarioEntity.getDataNascimento(),
+                                        usuarioEntity.getSexo(),
+                                        usuarioEntity.getDataCadastro(),
+                                        new PerfilTypeResponseDto( usuarioEntity.getPerfil().getCodigo(),
+                                                                   usuarioEntity.getPerfil().getDescricao(),
+                                                                   usuarioEntity.getPerfil().getAtivo())
+                                ))
+                                .collect( Collectors.toList() );
     }
 
-    public UsuarioEntity authenticate(String cpf, String senha) {
-        UsuarioEntity usuarioEntity = usuarioRepository.findByCpf(cpf);
-        if ( usuarioEntity != null && passwordEncoder.matches(senha, usuarioEntity.getSenha())) {
-            return usuarioEntity;
+
+    public UsuarioResponseDto authenticate( String cpf, String senha ) {
+        UsuarioEntity usuarioEntity = usuarioRepository.findByCpf( cpf );
+        if ( usuarioEntity != null && passwordEncoder.matches( senha, usuarioEntity.getSenha() ) ) {
+            return new UsuarioResponseDto( usuarioEntity.getId(), usuarioEntity.getNome(), usuarioEntity.getCpf(), usuarioEntity.getSenha(),
+                    usuarioEntity.getDataNascimento(), usuarioEntity.getSexo(),
+                    usuarioEntity.getDataCadastro(), convertToDto( usuarioEntity.getPerfil() ) );
         }
 
         return null;
+    }
+
+    public PerfilTypeResponseDto convertToDto( PerfilEntity perfilEntity ) {
+        return new PerfilTypeResponseDto( perfilEntity.getCodigo(), perfilEntity.getDescricao(), perfilEntity.getAtivo() );
     }
 }
