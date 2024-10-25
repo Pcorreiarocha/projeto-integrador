@@ -85,8 +85,8 @@ public class UsuarioService {
                                         usuarioEntity.getDataCadastro(),
                                         new PerfilTypeResponseDto( usuarioEntity.getPerfil().getCodigo(),
                                                                    usuarioEntity.getPerfil().getDescricao(),
-                                                                   usuarioEntity.getPerfil().getAtivo())
-                                ))
+                                                                   usuarioEntity.getPerfil().getAtivo() )
+                                ) )
                                 .collect( Collectors.toList() );
     }
 
