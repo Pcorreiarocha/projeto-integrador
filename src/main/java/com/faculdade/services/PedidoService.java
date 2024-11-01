@@ -3,7 +3,7 @@ package com.faculdade.services;
 import com.faculdade.commons.exceptions.NegocioException;
 import com.faculdade.controllers.dtos.pedido.PedidoRequestDto;
 import com.faculdade.controllers.dtos.pedido.PedidoResponseDto;
-import com.faculdade.controllers.dtos.pedidorefeicao.PedidoRefeicaoDto;
+import com.faculdade.controllers.dtos.pedido_refeicao.PedidoRefeicaoDto;
 import com.faculdade.domain.entity.PedidoEntity;
 import com.faculdade.domain.entity.PedidoRefeicaoEntity;
 import com.faculdade.domain.entity.RefeicaoEntity;

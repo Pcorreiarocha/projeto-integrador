@@ -1,4 +1,4 @@
-package com.faculdade.controllers.dtos.pedidorefeicao;
+package com.faculdade.controllers.dtos.pedido_refeicao;
 
 import com.faculdade.controllers.dtos.refeicao.RefeicaoResponseDto;
 
