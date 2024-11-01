@@ -16,4 +16,8 @@ public class MedicoEntity{
     @ManyToOne( fetch = FetchType.LAZY )
     @JoinColumn( name = "idPaciente")
     private PacienteEntity paciente;
+
+    @ManyToOne( fetch = FetchType.LAZY )
+    @JoinColumn( name = "idUsuario" )
+    private UsuarioEntity usuario;
 }

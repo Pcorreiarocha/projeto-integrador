@@ -4,9 +4,11 @@ import com.faculdade.commons.exceptions.NegocioException;
 import com.faculdade.controllers.dtos.perfil.PerfilTypeResponseDto;
 import com.faculdade.controllers.dtos.usuario.UsuarioRequestDto;
 import com.faculdade.controllers.dtos.usuario.UsuarioResponseDto;
+import com.faculdade.domain.entity.MedicoEntity;
 import com.faculdade.domain.entity.PacienteEntity;
 import com.faculdade.domain.entity.PerfilEntity;
 import com.faculdade.domain.entity.UsuarioEntity;
+import com.faculdade.repositories.MedicoRepository;
 import com.faculdade.repositories.PacienteRepository;
 import com.faculdade.repositories.UsuarioRepository;
 import lombok.AllArgsConstructor;
@@ -23,6 +25,7 @@ import java.util.stream.Collectors;
 public class UsuarioService {
 
     private final ModelMapper        modelMapper;
+    private final MedicoRepository medicoRepository;
     private       UsuarioRepository  usuarioRepository;
     private       PacienteRepository pacienteRepository;
     private final PasswordEncoder    passwordEncoder;
@@ -51,8 +54,15 @@ public class UsuarioService {
             pacienteRepository.save( pacienteEntity );
         }
 
+        if( usuarioEntity.getPerfil().getDescricao().equals( "Médico" ) ) {
+            MedicoEntity medicoEntity = new MedicoEntity();
+            medicoEntity.setUsuario( usuarioEntity );
+            medicoEntity.setPaciente( null );
+            medicoRepository.save( medicoEntity );
+        }
+
         return new UsuarioResponseDto( usuarioEntity.getId(), usuarioEntity.getNome(), usuarioEntity.getCpf(), usuarioEntity.getSenha(),
-                usuarioEntity.getDataNascimento(), usuarioEntity.getSexo(), usuarioEntity.getDataCadastro(), perfilTypeResponseDto );
+                                       usuarioEntity.getDataNascimento(), usuarioEntity.getSexo(), usuarioEntity.getDataCadastro(), perfilTypeResponseDto );
     }
 
     public UsuarioResponseDto findById( Long id ) {
@@ -64,7 +74,7 @@ public class UsuarioService {
                                                                             "S" );
 
         return new UsuarioResponseDto( usuarioEntity.getId(), usuarioEntity.getNome(), usuarioEntity.getCpf(), usuarioEntity.getSenha(),
-                usuarioEntity.getDataNascimento(), usuarioEntity.getSexo(), usuarioEntity.getDataCadastro(), perfilTypeResponseDto );
+                                       usuarioEntity.getDataNascimento(), usuarioEntity.getSexo(), usuarioEntity.getDataCadastro(), perfilTypeResponseDto );
     }
 
     public void delete( Long id ) {
@@ -93,10 +103,10 @@ public class UsuarioService {
 
     public UsuarioResponseDto authenticate( String cpf, String senha ) {
         UsuarioEntity usuarioEntity = usuarioRepository.findByCpf( cpf );
-        if ( usuarioEntity != null && passwordEncoder.matches( senha, usuarioEntity.getSenha() ) ) {
+        if( usuarioEntity != null && passwordEncoder.matches( senha, usuarioEntity.getSenha() ) ) {
             return new UsuarioResponseDto( usuarioEntity.getId(), usuarioEntity.getNome(), usuarioEntity.getCpf(), usuarioEntity.getSenha(),
-                    usuarioEntity.getDataNascimento(), usuarioEntity.getSexo(),
-                    usuarioEntity.getDataCadastro(), convertToDto( usuarioEntity.getPerfil() ) );
+                                           usuarioEntity.getDataNascimento(), usuarioEntity.getSexo(),
+                                           usuarioEntity.getDataCadastro(), convertToDto( usuarioEntity.getPerfil() ) );
         }
 
         return null;
