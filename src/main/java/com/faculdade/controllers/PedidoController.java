@@ -1,6 +1,8 @@
 package com.faculdade.controllers;
 
-import com.faculdade.domain.entity.Pedido;
+import com.faculdade.commons.support.Response;
+import com.faculdade.controllers.dtos.pedido.PedidoRequestDto;
+import com.faculdade.controllers.dtos.pedido.PedidoResponseDto;
 import com.faculdade.services.PedidoService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +19,12 @@ public class PedidoController {
     private PedidoService pedidoService;
 
     @PostMapping
-    public ResponseEntity<Pedido> criarPedido(@RequestBody Pedido pedido) {
-        Pedido novoPedido = pedidoService.criarPedido(pedido);
-        return ResponseEntity.ok(novoPedido);
+    public ResponseEntity<Response<PedidoResponseDto>> criarPedido( @RequestBody PedidoRequestDto pedidoRequestDto ) {
+        return ResponseEntity.ok( Response.<PedidoResponseDto>builder()
+                .code( 0 )
+                .message( "OK" )
+                .success( Boolean.TRUE )
+                .data( this.pedidoService.salvarPedido( pedidoRequestDto ) )
+                .build() );
     }
 }
