@@ -20,4 +20,7 @@ public class PacienteEntity {
     @ManyToOne( fetch = FetchType.LAZY )
     @JoinColumn( name = "idUsuario" )
     private UsuarioEntity usuario;
+
+    @OneToOne( mappedBy = "paciente", cascade = CascadeType.ALL )
+    private FormularioMedicoEntity formularioMedico;
 }
