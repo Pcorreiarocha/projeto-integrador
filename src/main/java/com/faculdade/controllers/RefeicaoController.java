@@ -1,6 +1,7 @@
 package com.faculdade.controllers;
 
-import com.faculdade.domain.entity.RefeicaoEntity;
+import com.faculdade.commons.support.Response;
+import com.faculdade.controllers.dtos.refeicao.RefeicaoRequestDto;
 import com.faculdade.controllers.dtos.refeicao.RefeicaoResponseDto;
 import com.faculdade.services.RefeicaoService;
 import lombok.AllArgsConstructor;
@@ -17,49 +18,45 @@ public class RefeicaoController {
 
     private RefeicaoService refeicaoService;
 
+    @GetMapping( "/{idRefeicao}" )
+    public ResponseEntity<Response<RefeicaoResponseDto>> findById( @PathVariable Long idRefeicao ) {
+        return ResponseEntity.ok( Response.<RefeicaoResponseDto>builder()
+                .code( 0 )
+                .success( Boolean.TRUE )
+                .message( "OK" )
+                .data( this.refeicaoService.findById( idRefeicao ) )
+                .build() );
+
+    }
+
     @PostMapping
-    public ResponseEntity< RefeicaoEntity > save(@RequestBody RefeicaoEntity refeicaoEntity ) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(refeicaoService.save( refeicaoEntity ));
+    public ResponseEntity<Response<RefeicaoResponseDto>> save( @RequestBody RefeicaoRequestDto refeicaoRequestDto ) {
+        return ResponseEntity.status( HttpStatus.CREATED )
+                             .body( Response.<RefeicaoResponseDto>builder()
+                                     .code( 0 )
+                                     .success( Boolean.TRUE )
+                                     .message( "OK" )
+                                     .data( this.refeicaoService.save( refeicaoRequestDto ) )
+                                     .build() );
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity< RefeicaoResponseDto > findById(@PathVariable Long id) {
-        RefeicaoEntity refeicaoEntity = refeicaoService.findById(id);
-        if ( refeicaoEntity != null) {
-            RefeicaoResponseDto response = new RefeicaoResponseDto( refeicaoEntity.getIdRefeicao(), refeicaoEntity.getNome(), refeicaoEntity.getDescricao());
-            return ResponseEntity.ok(response);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity< RefeicaoResponseDto > update(@PathVariable Long id, @RequestBody RefeicaoEntity refeicaoEntityAtualizada ) {
-        RefeicaoEntity refeicaoEntity = refeicaoService.findById(id);
-        if ( refeicaoEntity != null) {
-            refeicaoEntityAtualizada.setIdRefeicao(id);
-            RefeicaoEntity updatedRefeicaoEntity = refeicaoService.save( refeicaoEntityAtualizada );
-            RefeicaoResponseDto response = new RefeicaoResponseDto( updatedRefeicaoEntity.getIdRefeicao(), updatedRefeicaoEntity.getNome(), updatedRefeicaoEntity.getDescricao());
-            return ResponseEntity.ok(response);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        RefeicaoEntity refeicaoEntity = refeicaoService.findById(id);
-        if ( refeicaoEntity != null) {
-            refeicaoService.delete(id);
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @DeleteMapping( "/{idRefeicao}" )
+    public ResponseEntity<Response<Void>> inativar( @PathVariable Long idRefeicao ) {
+        this.refeicaoService.inativar( idRefeicao );
+        return ResponseEntity.accepted().body(
+                Response.<Void>builder().code( 0 ).success( Boolean.TRUE ).message( "OK" ).build() );
     }
 
     @GetMapping("/")
-    public ResponseEntity<List< RefeicaoResponseDto >> findAll() {
-        List< RefeicaoResponseDto > refeicoes = refeicaoService.findAll();
-        return ResponseEntity.ok(refeicoes);
+    public ResponseEntity<Response<List<RefeicaoResponseDto>>> findAll() {
+        List<RefeicaoResponseDto> refeicaoResponseDtoList = refeicaoService.findAll();
+        return refeicaoResponseDtoList.isEmpty() ? new ResponseEntity<>(
+                Response.<List<RefeicaoResponseDto>>builder()
+                        .build(), HttpStatus.NO_CONTENT ) : ResponseEntity.ok( Response.<List<RefeicaoResponseDto>>builder()
+                                                                                       .code( 0 )
+                                                                                       .success( Boolean.TRUE )
+                                                                                       .message( "OK" )
+                                                                                       .data( refeicaoResponseDtoList )
+                                                                                       .build() );
     }
 }

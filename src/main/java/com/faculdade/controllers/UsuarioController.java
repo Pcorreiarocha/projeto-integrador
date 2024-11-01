@@ -27,7 +27,7 @@ public class UsuarioController {
                                            .success( Boolean.TRUE )
                                            .message( "OK" )
                                            .data( this.usuarioService.save( usuarioRequestDto ) )
-                                           .build());
+                                           .build() );
     }
 
     @GetMapping("/{idUsuario}")
@@ -37,7 +37,7 @@ public class UsuarioController {
                 .success( Boolean.TRUE )
                 .message( "OK" )
                 .data( this.usuarioService.findById( idUsuario ) )
-                .build());
+                .build() );
     }
 
     @DeleteMapping( "/{idUsuario}" )
@@ -69,7 +69,7 @@ public class UsuarioController {
                                               .success( Boolean.TRUE )
                                               .message( "OK" )
                                               .data( usuarioResponseDto )
-                                              .build());
+                                              .build() );
         } else {
             return ResponseEntity.status( HttpStatus.UNAUTHORIZED ).build();
         }
