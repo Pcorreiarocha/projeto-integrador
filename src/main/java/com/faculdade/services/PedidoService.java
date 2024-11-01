@@ -23,23 +23,10 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class PedidoService {
 
-    private final ModelMapper modelMapper;
-    private final RefeicaoService refeicaoService;
-    private final RefeicaoRepository refeicaoRepository;
-    private PedidoRepository pedidoRepository;
-    private PedidoRefeicaoRepository pedidoRefeicaoRepository;
-
-    @Transactional
-    public PedidoEntity criarPedido( PedidoEntity pedidoEntity ) {
-        PedidoEntity novoPedidoEntity = pedidoRepository.save( pedidoEntity );
-
-        for ( PedidoRefeicaoEntity pedidoRefeicaoEntity : pedidoEntity.getPedidoRefeicoes()) {
-            pedidoRefeicaoEntity.setPedidoEntity( novoPedidoEntity );
-            pedidoRefeicaoRepository.save( pedidoRefeicaoEntity );
-        }
-
-        return novoPedidoEntity;
-    }
+    private final ModelMapper              modelMapper;
+    private final RefeicaoRepository       refeicaoRepository;
+    private       PedidoRepository         pedidoRepository;
+    private       PedidoRefeicaoRepository pedidoRefeicaoRepository;
 
     @Transactional
     public PedidoResponseDto salvarPedido( PedidoRequestDto pedidoRequestDto ) {
@@ -51,7 +38,7 @@ public class PedidoService {
 
         List<PedidoRefeicaoEntity> pedidoRefeicoes = pedidoRequestDto.pedidoRefeicoes().stream()
                 .map( dto -> convertToPedidoRefeicaoEntity( dto, pedidoSalvo ) )
-                .collect( Collectors.toList());
+                .collect( Collectors.toList() );
 
         pedidoEntity.setPedidoRefeicoes( pedidoRefeicoes );
 
