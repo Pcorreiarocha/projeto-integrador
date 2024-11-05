@@ -25,10 +25,9 @@ import java.util.stream.Collectors;
 public class UsuarioService {
 
     private final ModelMapper        modelMapper;
-    private final MedicoRepository medicoRepository;
     private       UsuarioRepository  usuarioRepository;
-    private       PacienteRepository pacienteRepository;
     private final PasswordEncoder    passwordEncoder;
+    private       PerfilService      perfilService;
 
     public UsuarioResponseDto save( UsuarioRequestDto usuarioRequestDto ) {
         UsuarioEntity usuarioEntity = modelMapper.map( usuarioRequestDto, UsuarioEntity.class );
@@ -47,19 +46,7 @@ public class UsuarioService {
 
         usuarioRepository.save( usuarioEntity );
 
-        if( usuarioEntity.getPerfil().getDescricao().equals( "Paciente" ) ) {
-            PacienteEntity pacienteEntity = new PacienteEntity();
-            pacienteEntity.setUsuario( usuarioEntity );
-            pacienteEntity.setMedico( null );
-            pacienteRepository.save( pacienteEntity );
-        }
-
-        if( usuarioEntity.getPerfil().getDescricao().equals( "Médico" ) ) {
-            MedicoEntity medicoEntity = new MedicoEntity();
-            medicoEntity.setUsuario( usuarioEntity );
-            medicoEntity.setPaciente( null );
-            medicoRepository.save( medicoEntity );
-        }
+        perfilService.atribuir( usuarioEntity.getPerfil().getDescricao(), usuarioEntity );
 
         return new UsuarioResponseDto( usuarioEntity.getId(), usuarioEntity.getNome(), usuarioEntity.getCpf(), usuarioEntity.getSenha(),
                                        usuarioEntity.getDataNascimento(), usuarioEntity.getSexo(), usuarioEntity.getDataCadastro(), perfilTypeResponseDto );

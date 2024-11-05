@@ -52,6 +52,7 @@ public class PedidoService {
     private PedidoRefeicaoEntity convertToPedidoRefeicaoEntity( PedidoRefeicaoDto pedidoRefeicaoDto, PedidoEntity pedidoSalvo ) {
         PedidoRefeicaoEntity pedidoRefeicaoEntity = new PedidoRefeicaoEntity();
         pedidoRefeicaoEntity.setQuantidadeRefeicao( pedidoRefeicaoDto.quantidadeRefeicao() );
+        System.out.println( "pedido: " + pedidoSalvo.getIdPedido() );
         pedidoRefeicaoEntity.setPedidoEntity( pedidoSalvo );
 
         RefeicaoEntity refeicaoEntity = refeicaoRepository.getReferenceById( pedidoRefeicaoDto.refeicao().idRefeicao() );
