@@ -44,12 +44,13 @@ public class RefeicaoService {
     public void inativar( Long idRefeicao ) {
         RefeicaoResponseDto refeicaoResponseDto = findById( idRefeicao );
         RefeicaoEntity refeicaoEntity = modelMapper.map( refeicaoResponseDto, RefeicaoEntity.class );
-        refeicaoEntity.setDisponibilidade("Inativo");
+        refeicaoEntity.setDisponibilidade( "Inativo" );
         refeicaoRepository.save( refeicaoEntity );
     }
 
     public List<RefeicaoResponseDto> findAll() {
         return refeicaoRepository.findAll().stream()
+                .filter( refeicaoEntity -> "Ativo".equals( refeicaoEntity.getDisponibilidade() ) )
                 .map( refeicaoEntity -> new RefeicaoResponseDto(
                         refeicaoEntity.getIdRefeicao(),
                         refeicaoEntity.getNome(),
