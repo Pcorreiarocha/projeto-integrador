@@ -3,7 +3,7 @@ package com.faculdade.services;
 import com.faculdade.commons.exceptions.NegocioException;
 import com.faculdade.controllers.dtos.pedido.PedidoRequestDto;
 import com.faculdade.controllers.dtos.pedido.PedidoResponseDto;
-import com.faculdade.controllers.dtos.pedidorefeicao.PedidoRefeicaoDto;
+import com.faculdade.controllers.dtos.pedido_refeicao.PedidoRefeicaoDto;
 import com.faculdade.domain.entity.PedidoEntity;
 import com.faculdade.domain.entity.PedidoRefeicaoEntity;
 import com.faculdade.domain.entity.RefeicaoEntity;
@@ -44,6 +44,7 @@ public class PedidoService {
 
         return new PedidoResponseDto( pedidoEntity.getIdPedido(),
                                       pedidoEntity.getStatusPedido(),
+                                      pedidoEntity.getNumeroQuarto(),
                                       pedidoEntity.getConfirmacaoGarcom(),
                                       pedidoEntity.getConfirmacaoPaciente(),
                                       pedidoRequestDto.pedidoRefeicoes() );
@@ -52,6 +53,7 @@ public class PedidoService {
     private PedidoRefeicaoEntity convertToPedidoRefeicaoEntity( PedidoRefeicaoDto pedidoRefeicaoDto, PedidoEntity pedidoSalvo ) {
         PedidoRefeicaoEntity pedidoRefeicaoEntity = new PedidoRefeicaoEntity();
         pedidoRefeicaoEntity.setQuantidadeRefeicao( pedidoRefeicaoDto.quantidadeRefeicao() );
+        System.out.println( "pedido: " + pedidoSalvo.getIdPedido() );
         pedidoRefeicaoEntity.setPedidoEntity( pedidoSalvo );
 
         RefeicaoEntity refeicaoEntity = refeicaoRepository.getReferenceById( pedidoRefeicaoDto.refeicao().idRefeicao() );
