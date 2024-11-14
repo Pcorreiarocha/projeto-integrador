@@ -27,6 +27,8 @@ public class PedidoEntity {
     @JsonFormat(pattern = "confirmacaoPaciente")
     private Boolean confirmacaoPaciente;
 
+    private Long numeroQuarto;
+
     @OneToMany(mappedBy = "pedidoEntity", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<PedidoRefeicaoEntity> pedidoRefeicoes = new ArrayList<>();

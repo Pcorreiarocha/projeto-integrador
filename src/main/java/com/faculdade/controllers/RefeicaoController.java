@@ -21,23 +21,22 @@ public class RefeicaoController {
     @GetMapping( "/{idRefeicao}" )
     public ResponseEntity<Response<RefeicaoResponseDto>> findById( @PathVariable Long idRefeicao ) {
         return ResponseEntity.ok( Response.<RefeicaoResponseDto>builder()
-                .code( 0 )
-                .success( Boolean.TRUE )
-                .message( "OK" )
-                .data( this.refeicaoService.findById( idRefeicao ) )
-                .build() );
-
+                                          .code( 0 )
+                                          .success( Boolean.TRUE )
+                                          .message( "OK" )
+                                          .data( this.refeicaoService.findById( idRefeicao ) )
+                                          .build() );
     }
 
     @PostMapping
     public ResponseEntity<Response<RefeicaoResponseDto>> save( @RequestBody RefeicaoRequestDto refeicaoRequestDto ) {
         return ResponseEntity.status( HttpStatus.CREATED )
                              .body( Response.<RefeicaoResponseDto>builder()
-                                     .code( 0 )
-                                     .success( Boolean.TRUE )
-                                     .message( "OK" )
-                                     .data( this.refeicaoService.save( refeicaoRequestDto ) )
-                                     .build() );
+                                            .code( 0 )
+                                            .success( Boolean.TRUE )
+                                            .message( "OK" )
+                                            .data( this.refeicaoService.save( refeicaoRequestDto ) )
+                                            .build() );
     }
 
     @DeleteMapping( "/{idRefeicao}" )

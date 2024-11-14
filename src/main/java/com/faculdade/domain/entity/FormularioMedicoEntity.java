@@ -1,10 +1,7 @@
 package com.faculdade.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,4 +22,12 @@ public class FormularioMedicoEntity {
 
     @JsonFormat( pattern = "observacao" )
     private String observacao;
+
+    @ManyToOne
+    @JoinColumn( name = "idMedico" )
+    private MedicoEntity medico;
+
+    @OneToOne
+    @JoinColumn( name = "idPaciente")
+    private PacienteEntity paciente;
 }

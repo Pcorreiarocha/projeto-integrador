@@ -4,10 +4,8 @@ import com.faculdade.commons.exceptions.NegocioException;
 import com.faculdade.controllers.dtos.perfil.PerfilTypeResponseDto;
 import com.faculdade.controllers.dtos.usuario.UsuarioRequestDto;
 import com.faculdade.controllers.dtos.usuario.UsuarioResponseDto;
-import com.faculdade.domain.entity.PacienteEntity;
 import com.faculdade.domain.entity.PerfilEntity;
 import com.faculdade.domain.entity.UsuarioEntity;
-import com.faculdade.repositories.PacienteRepository;
 import com.faculdade.repositories.UsuarioRepository;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -16,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,8 +23,8 @@ public class UsuarioService {
 
     private final ModelMapper        modelMapper;
     private       UsuarioRepository  usuarioRepository;
-    private       PacienteRepository pacienteRepository;
     private final PasswordEncoder    passwordEncoder;
+    private       PerfilService      perfilService;
 
     public UsuarioResponseDto save( UsuarioRequestDto usuarioRequestDto ) {
         UsuarioEntity usuarioEntity = modelMapper.map( usuarioRequestDto, UsuarioEntity.class );
@@ -44,15 +43,10 @@ public class UsuarioService {
 
         usuarioRepository.save( usuarioEntity );
 
-        if( usuarioEntity.getPerfil().getDescricao().equals( "Paciente" ) ) {
-            PacienteEntity pacienteEntity = new PacienteEntity();
-            pacienteEntity.setUsuario( usuarioEntity );
-            pacienteEntity.setMedico( null );
-            pacienteRepository.save( pacienteEntity );
-        }
+        perfilService.atribuir( usuarioEntity.getPerfil().getDescricao(), usuarioEntity );
 
         return new UsuarioResponseDto( usuarioEntity.getId(), usuarioEntity.getNome(), usuarioEntity.getCpf(), usuarioEntity.getSenha(),
-                usuarioEntity.getDataNascimento(), usuarioEntity.getSexo(), usuarioEntity.getDataCadastro(), perfilTypeResponseDto );
+                                       usuarioEntity.getDataNascimento(), usuarioEntity.getSexo(), usuarioEntity.getDataCadastro(), perfilTypeResponseDto );
     }
 
     public UsuarioResponseDto findById( Long id ) {
@@ -64,18 +58,18 @@ public class UsuarioService {
                                                                             "S" );
 
         return new UsuarioResponseDto( usuarioEntity.getId(), usuarioEntity.getNome(), usuarioEntity.getCpf(), usuarioEntity.getSenha(),
-                usuarioEntity.getDataNascimento(), usuarioEntity.getSexo(), usuarioEntity.getDataCadastro(), perfilTypeResponseDto );
+                                       usuarioEntity.getDataNascimento(), usuarioEntity.getSexo(), usuarioEntity.getDataCadastro(), perfilTypeResponseDto );
     }
 
     public void delete( Long id ) {
-        UsuarioResponseDto usuarioResponseDto = findById(id);
+        UsuarioResponseDto usuarioResponseDto = findById( id );
         UsuarioEntity usuarioEntity = modelMapper.map( usuarioResponseDto, UsuarioEntity.class );
         usuarioRepository.delete( usuarioEntity );
     }
 
     public List<UsuarioResponseDto> findAll() {
         return usuarioRepository.findAll().stream()
-                                .map(usuarioEntity -> new UsuarioResponseDto(
+                                .map( usuarioEntity -> new UsuarioResponseDto(
                                         usuarioEntity.getId(),
                                         usuarioEntity.getNome(),
                                         usuarioEntity.getCpf(),
@@ -93,10 +87,10 @@ public class UsuarioService {
 
     public UsuarioResponseDto authenticate( String cpf, String senha ) {
         UsuarioEntity usuarioEntity = usuarioRepository.findByCpf( cpf );
-        if ( usuarioEntity != null && passwordEncoder.matches( senha, usuarioEntity.getSenha() ) ) {
+        if( usuarioEntity != null && passwordEncoder.matches( senha, usuarioEntity.getSenha() ) ) {
             return new UsuarioResponseDto( usuarioEntity.getId(), usuarioEntity.getNome(), usuarioEntity.getCpf(), usuarioEntity.getSenha(),
-                    usuarioEntity.getDataNascimento(), usuarioEntity.getSexo(),
-                    usuarioEntity.getDataCadastro(), convertToDto( usuarioEntity.getPerfil() ) );
+                                           usuarioEntity.getDataNascimento(), usuarioEntity.getSexo(),
+                                           usuarioEntity.getDataCadastro(), convertToDto( usuarioEntity.getPerfil() ) );
         }
 
         return null;
@@ -104,5 +98,9 @@ public class UsuarioService {
 
     public PerfilTypeResponseDto convertToDto( PerfilEntity perfilEntity ) {
         return new PerfilTypeResponseDto( perfilEntity.getCodigo(), perfilEntity.getDescricao(), perfilEntity.getAtivo() );
+    }
+
+    public Optional<UsuarioEntity> buscarUsuarioPorNome( String nome ) {
+        return usuarioRepository.findFirstByNomeContaining( nome );
     }
 }

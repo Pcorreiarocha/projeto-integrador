@@ -26,3 +26,7 @@ Poderá ser utilizado a IDE de preferencia, ou rodar diretamente pelo maven util
 
 Projeto utiliza a porta default:8080 -> http://localhost:8080
 
+## Desenvolvedor do Sistema:
+
+João Pedro Lima de Oliveira
+

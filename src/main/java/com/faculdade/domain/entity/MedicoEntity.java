@@ -4,23 +4,20 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+@Entity
 @Getter
 @Setter
-@Entity
-public class PacienteEntity {
+public class MedicoEntity{
 
     @Id
     @GeneratedValue( strategy = GenerationType.IDENTITY )
-    private Long idPaciente;
+    private Long idMedico;
 
     @ManyToOne( fetch = FetchType.LAZY )
-    @JoinColumn( name = "idMedico" )
-    private UsuarioEntity medico;
+    @JoinColumn( name = "idPaciente")
+    private PacienteEntity paciente;
 
     @ManyToOne( fetch = FetchType.LAZY )
     @JoinColumn( name = "idUsuario" )
     private UsuarioEntity usuario;
-
-    @OneToOne( mappedBy = "paciente", cascade = CascadeType.ALL )
-    private FormularioMedicoEntity formularioMedico;
 }
