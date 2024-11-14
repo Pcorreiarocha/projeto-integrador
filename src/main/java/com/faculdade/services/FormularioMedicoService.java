@@ -19,7 +19,7 @@ public class FormularioMedicoService{
     private final ModelMapper modelMapper;
     private FormularioMedicoRepository formularioMedicoRepository;
 
-    public FormularioMedicoResponseDto findById( Long idFormulario ) {
+    /*public FormularioMedicoResponseDto findById( Long idFormulario ) {
         FormularioMedicoEntity formularioMedicoEntity = formularioMedicoRepository.findById( idFormulario )
                                                                                   .orElseThrow( () -> new NegocioException( "Formulário não encontrado" ) );
 
@@ -27,20 +27,25 @@ public class FormularioMedicoService{
                                                 formularioMedicoEntity.getTipoDieta(),
                                                 formularioMedicoEntity.getViaAdministracao(),
                                                 formularioMedicoEntity.getObservacao() );
-    }
+    }*/
 
     public FormularioMedicoResponseDto save( FormularioMedicoRequestDto formularioMedicoRequestDto ) {
+        System.out.println( formularioMedicoRequestDto.nomeMedico() );
+        System.out.println( formularioMedicoRequestDto.tipoDieta() );
+
         FormularioMedicoEntity formularioMedicoEntity = modelMapper.map( formularioMedicoRequestDto, FormularioMedicoEntity.class );
 
         formularioMedicoRepository.save( formularioMedicoEntity );
 
         return new FormularioMedicoResponseDto( formularioMedicoEntity.getIdFormulario(),
+                                                formularioMedicoRequestDto.nomeMedico(),
+                                                formularioMedicoRequestDto.nomePaciente(),
                                                 formularioMedicoEntity.getTipoDieta(),
                                                 formularioMedicoEntity.getViaAdministracao(),
                                                 formularioMedicoEntity.getObservacao() );
     }
 
-    public List<FormularioMedicoResponseDto> findAll() {
+    /*public List<FormularioMedicoResponseDto> findAll() {
         return formularioMedicoRepository.findAll().stream()
                 .map( formularioMedicoEntity -> new FormularioMedicoResponseDto(
                         formularioMedicoEntity.getIdFormulario(),
@@ -49,5 +54,5 @@ public class FormularioMedicoService{
                         formularioMedicoEntity.getObservacao()
                 ) )
                 .collect( Collectors.toList() );
-    }
+    }*/
 }

@@ -4,12 +4,8 @@ import com.faculdade.commons.exceptions.NegocioException;
 import com.faculdade.controllers.dtos.perfil.PerfilTypeResponseDto;
 import com.faculdade.controllers.dtos.usuario.UsuarioRequestDto;
 import com.faculdade.controllers.dtos.usuario.UsuarioResponseDto;
-import com.faculdade.domain.entity.MedicoEntity;
-import com.faculdade.domain.entity.PacienteEntity;
 import com.faculdade.domain.entity.PerfilEntity;
 import com.faculdade.domain.entity.UsuarioEntity;
-import com.faculdade.repositories.MedicoRepository;
-import com.faculdade.repositories.PacienteRepository;
 import com.faculdade.repositories.UsuarioRepository;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -18,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -65,14 +62,14 @@ public class UsuarioService {
     }
 
     public void delete( Long id ) {
-        UsuarioResponseDto usuarioResponseDto = findById(id);
+        UsuarioResponseDto usuarioResponseDto = findById( id );
         UsuarioEntity usuarioEntity = modelMapper.map( usuarioResponseDto, UsuarioEntity.class );
         usuarioRepository.delete( usuarioEntity );
     }
 
     public List<UsuarioResponseDto> findAll() {
         return usuarioRepository.findAll().stream()
-                                .map(usuarioEntity -> new UsuarioResponseDto(
+                                .map( usuarioEntity -> new UsuarioResponseDto(
                                         usuarioEntity.getId(),
                                         usuarioEntity.getNome(),
                                         usuarioEntity.getCpf(),
@@ -101,5 +98,9 @@ public class UsuarioService {
 
     public PerfilTypeResponseDto convertToDto( PerfilEntity perfilEntity ) {
         return new PerfilTypeResponseDto( perfilEntity.getCodigo(), perfilEntity.getDescricao(), perfilEntity.getAtivo() );
+    }
+
+    public Optional<UsuarioEntity> buscarUsuarioPorNome( String nome ) {
+        return usuarioRepository.findFirstByNomeContaining( nome );
     }
 }

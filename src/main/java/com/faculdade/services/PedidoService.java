@@ -44,6 +44,7 @@ public class PedidoService {
 
         return new PedidoResponseDto( pedidoEntity.getIdPedido(),
                                       pedidoEntity.getStatusPedido(),
+                                      pedidoEntity.getNumeroQuarto(),
                                       pedidoEntity.getConfirmacaoGarcom(),
                                       pedidoEntity.getConfirmacaoPaciente(),
                                       pedidoRequestDto.pedidoRefeicoes() );

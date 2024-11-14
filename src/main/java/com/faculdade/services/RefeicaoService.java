@@ -26,7 +26,7 @@ public class RefeicaoService {
         return new RefeicaoResponseDto( refeicaoEntity.getIdRefeicao(),
                 refeicaoEntity.getNome(),
                 refeicaoEntity.getDescricao(),
-                refeicaoEntity.getDisponibilidade());
+                refeicaoEntity.getDisponibilidade() );
     }
 
     public RefeicaoResponseDto save( RefeicaoRequestDto refeicaoRequestDto ) {
@@ -38,7 +38,7 @@ public class RefeicaoService {
         return new RefeicaoResponseDto( refeicaoEntity.getIdRefeicao(),
                 refeicaoEntity.getNome(),
                 refeicaoEntity.getDescricao(),
-                refeicaoEntity.getDisponibilidade());
+                refeicaoEntity.getDisponibilidade() );
     }
 
     public void inativar( Long idRefeicao ) {
