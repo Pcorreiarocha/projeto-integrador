@@ -18,7 +18,7 @@ public class FormularioMedicoController {
 
     private final FormularioMedicoService formularioMedicoService;
 
-    /*@GetMapping( "/{idFormulario}" )
+    @GetMapping( "/{idFormulario}" )
     public ResponseEntity<Response<FormularioMedicoResponseDto>> findById( @PathVariable Long idFormulario ) {
         return ResponseEntity.ok( Response.<FormularioMedicoResponseDto>builder()
                                           .code( 0 )
@@ -26,7 +26,7 @@ public class FormularioMedicoController {
                                           .message( "OK" )
                                           .data( this.formularioMedicoService.findById( idFormulario ) )
                                           .build() );
-    }*/
+    }
 
     @PostMapping
     public ResponseEntity<Response<FormularioMedicoResponseDto>> save( @RequestBody FormularioMedicoRequestDto formularioMedicoRequestDto ) {
@@ -39,7 +39,7 @@ public class FormularioMedicoController {
                                             .build() );
     }
 
-    /*@GetMapping( "/" )
+    @GetMapping( "/" )
     public ResponseEntity<Response<List<FormularioMedicoResponseDto>>> findAll() {
         List<FormularioMedicoResponseDto> formularioMedicoResponseDtoList = formularioMedicoService.findAll();
         return formularioMedicoResponseDtoList.isEmpty() ? new ResponseEntity<>(
@@ -50,5 +50,5 @@ public class FormularioMedicoController {
                                                                                        .message( "OK" )
                                                                                        .data( this.formularioMedicoService.findAll() )
                                                                                        .build() );
-    }*/
+    }
 }

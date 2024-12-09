@@ -41,9 +41,9 @@ public class UsuarioService {
                                                                                  usuarioRequestDto.perfil().descricao(),
                                                                                  "S" );
 
-        usuarioRepository.save( usuarioEntity );
+        UsuarioEntity usuarioSalvo = usuarioRepository.save( usuarioEntity );
 
-        perfilService.atribuir( usuarioEntity.getPerfil().getDescricao(), usuarioEntity );
+        perfilService.atribuir( usuarioEntity.getPerfil().getDescricao(), usuarioSalvo );
 
         return new UsuarioResponseDto( usuarioEntity.getId(), usuarioEntity.getNome(), usuarioEntity.getCpf(), usuarioEntity.getSenha(),
                                        usuarioEntity.getDataNascimento(), usuarioEntity.getSexo(), usuarioEntity.getDataCadastro(), perfilTypeResponseDto );
@@ -69,6 +69,7 @@ public class UsuarioService {
 
     public List<UsuarioResponseDto> findAll() {
         return usuarioRepository.findAll().stream()
+                .filter( usuarioEntity -> "Paciente".equals( usuarioEntity.getPerfil().getDescricao() ) )
                                 .map( usuarioEntity -> new UsuarioResponseDto(
                                         usuarioEntity.getId(),
                                         usuarioEntity.getNome(),
@@ -94,6 +95,12 @@ public class UsuarioService {
         }
 
         return null;
+    }
+
+    public UsuarioEntity findByIdEntity( Long id ) {
+        UsuarioEntity usuarioEntity = usuarioRepository.findById( id )
+                                                       .orElseThrow( () -> new NegocioException( "Usuário não encontrado" ) );
+        return usuarioEntity;
     }
 
     public PerfilTypeResponseDto convertToDto( PerfilEntity perfilEntity ) {

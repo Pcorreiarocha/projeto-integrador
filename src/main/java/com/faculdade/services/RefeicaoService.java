@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -51,6 +52,7 @@ public class RefeicaoService {
     public List<RefeicaoResponseDto> findAll() {
         return refeicaoRepository.findAll().stream()
                 .filter( refeicaoEntity -> "Ativo".equals( refeicaoEntity.getDisponibilidade() ) )
+                .sorted( Comparator.comparing( RefeicaoEntity::getIdRefeicao ) )
                 .map( refeicaoEntity -> new RefeicaoResponseDto(
                         refeicaoEntity.getIdRefeicao(),
                         refeicaoEntity.getNome(),
