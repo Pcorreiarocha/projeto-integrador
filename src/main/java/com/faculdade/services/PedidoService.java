@@ -44,10 +44,20 @@ public class PedidoService {
 
         return new PedidoResponseDto( pedidoEntity.getIdPedido(),
                                       pedidoEntity.getStatusPedido(),
-                                      pedidoEntity.getNumeroQuarto(),
+                                      pedidoEntity.getNumeroQuarto()/*,
                                       pedidoEntity.getConfirmacaoGarcom(),
                                       pedidoEntity.getConfirmacaoPaciente(),
-                                      pedidoRequestDto.pedidoRefeicoes() );
+                                      pedidoRequestDto.pedidoRefeicoes() */);
+    }
+
+    public List<PedidoResponseDto> findAll() {
+        return pedidoRepository.findAll().stream()
+                .map( pedidoEntity -> new PedidoResponseDto(
+                        pedidoEntity.getIdPedido(),
+                        pedidoEntity.getStatusPedido(),
+                        pedidoEntity.getNumeroQuarto()
+                ) )
+                .collect( Collectors.toList() );
     }
 
     private PedidoRefeicaoEntity convertToPedidoRefeicaoEntity( PedidoRefeicaoDto pedidoRefeicaoDto, PedidoEntity pedidoSalvo ) {
